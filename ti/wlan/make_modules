@@ -1,0 +1,29 @@
+export ARCH=arm
+export CROSS_COMPILE=/home/jsega/arm-eabi-4.4.3/bin/arm-eabi-
+export KLIB=/home/jsega/Rushkernel/linux
+export KLIB_BUILD=$KLIB
+cd compat-wireless-wl12xx/
+./scripts/driver-select wl12xx
+make
+cp ./net/wireless/cfg80211.ko ../out/.
+cp ./net/mac80211/mac80211.ko ../out/.
+cp ./compat/compat.ko ../out/.
+cp ./compat/compat_firmware_class.ko ../out/.
+cp ./drivers/net/wireless/wl12xx/wl12xx.ko ../out/.
+cp ./drivers/net/wireless/wl12xx/wl12xx_sdio.ko ../out/.
+make clean
+STRIP=/home/jsega/arm-eabi-4.4.3/bin/arm-eabi-strip
+cd ../out
+$STRIP --strip-unneeded cfg80211.ko
+$STRIP --strip-unneeded mac80211.ko
+$STRIP --strip-unneeded compat.ko
+$STRIP --strip-unneeded compat_firmware_class.ko
+$STRIP --strip-unneeded wl12xx.ko
+$STRIP --strip-unneeded wl12xx_sdio.ko
+cd ..
+mv out/cfg80211.ko modules/net/wireless/.
+mv out/mac80211.ko modules/net/mac80211/.
+mv out/compat.ko modules/compat/.
+mv out/compat_firmware_class.ko modules/compat/.
+mv out/wl12xx.ko modules/drivers/net/wireless/wl12xx/.
+mv out/wl12xx_sdio.ko modules/drivers/net/wireless/wl12xx/.
